@@ -2,6 +2,8 @@
 
 Implementation of the [combine operation](http://resources.arcgis.com/en/help/main/10.2/index.html#/Combine/009z0000007r000000/)
 
+**Note: this is a work in progress; the core numpy function (`combine_rasters_df`) is working but eventually this will be rio plugin**
+
 ## Overview
 
 Given two arrays of equal shape (i.e. raster data with the same spatial referencing, origin, shape and cellsize):
