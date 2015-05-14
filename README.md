@@ -10,14 +10,14 @@ Given two arrays of equal shape (i.e. raster data with the same spatial referenc
 
 ```
 a = np.array(
-    [[10 12 12 12]
-     [12 12 12 11]
-     [12 10 10 11]])
+    [[10, 12, 12, 12],
+     [12, 12, 12, 11],
+     [12, 10, 10, 11]])
 
 b = np.array(
-    [[20 22 21 22]
-     [21 21 22 22]
-     [20 21 22 21]]])
+    [[20, 22, 21, 22],
+     [21, 21, 22, 22],
+     [20, 21, 22, 21]]])
 
 comb, df = combine_rasters_df(a, b)
 ```
@@ -66,7 +66,7 @@ There are some constraints of this implementation that you should be aware of:
 
 ## Performance
 
-Compare to http://gis.stackexchange.com/questions/120102/fast-raster-combine-using-rasterio 
+Compare to http://gis.stackexchange.com/questions/120102/fast-raster-combine-using-rasterio
 
 ```
 $ python combine.py
