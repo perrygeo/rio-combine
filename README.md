@@ -56,8 +56,8 @@ There are some constraints of this implementation that you should be aware of:
 
 * Input arrays
     * must have same shape, are assumed to have the exact same spatial referencing, etc.
-    * must be integers, 16-bit less, due to limitations in Cantor pairing algorithm
-* Can only two arrays at a time (n-value cantor "pairing" is not implemented yet)
+    * must be integers, 16-bit or less, due to limitations in Cantor pairing algorithm
+* Can only process two arrays at a time (n-value cantor "pairing" is not implemented yet)
 * Output cell values are not contiguous or human-readable (but they are interpretable as a Cantor pair and this can be `depair`ed easily)
 
 ## Performance
