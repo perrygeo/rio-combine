@@ -58,9 +58,11 @@ There are some constraints of this implementation that you should be aware of:
 
 * Input arrays
     * must have same shape, are assumed to have the exact same spatial referencing, etc.
-    * must be integers, 16-bit or less, due to limitations in Cantor pairing algorithm
+    * must be integers, 16-bit or less, due to limitations in Cantor pairing algorithm implementation. Even `long`s start to overflow when input integers get up to 2**27, so 32 bit ints are not safe.
 * Can only process two arrays at a time (n-value cantor "pairing" is not implemented yet)
 * Output cell values are not contiguous or human-readable (but they are interpretable as a Cantor pair and this can be `depair`ed easily)
+* No unit tests (yet)
+* Unknown results when using masked arrays (nodata values)
 
 ## Performance
 
