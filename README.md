@@ -4,15 +4,6 @@ Implementation of the [combine operation](http://resources.arcgis.com/en/help/ma
 
 **Note: this is a work in progress; the core numpy function (`combine_rasters_df`) is working but eventually this will be rio plugin**
 
-## Installtion
-
-For now, just use the working directory. To compile the cython version
-```
-python setup.py build_ext --inplace
-```
-
-Try it out with `python combine.py`
-
 ## Overview
 
 Given two arrays of equal shape (i.e. raster data with the same spatial referencing, origin, shape and cellsize):
@@ -58,6 +49,15 @@ and describe both input raster values and their counts:
 Instead of using tuples to describe pairs of array values, we can use the [Cantor pairing function](http://en.wikipedia.org/wiki/Pairing_function#Cantor_pairing_function) to encode/decode two integers to a single integer.
 
 This allows us to use simple algebraic expressions with the highly optimized [`numexpr`](https://github.com/pydata/numexpr/wiki/Numexpr-Users-Guide) library.
+
+## Installation
+
+For now, just use the working directory. To compile the cython version
+```
+python setup.py build_ext --inplace
+```
+
+Try it out with `python combine.py`
 
 ## Caveats
 
