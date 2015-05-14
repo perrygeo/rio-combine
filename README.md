@@ -17,7 +17,7 @@ a = np.array(
 b = np.array(
     [[20, 22, 21, 22],
      [21, 21, 22, 22],
-     [20, 21, 22, 21]]])
+     [20, 21, 22, 21]])
 
 comb, df = combine_rasters_df(a, b)
 ```
