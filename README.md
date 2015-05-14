@@ -4,6 +4,15 @@ Implementation of the [combine operation](http://resources.arcgis.com/en/help/ma
 
 **Note: this is a work in progress; the core numpy function (`combine_rasters_df`) is working but eventually this will be rio plugin**
 
+## Installtion
+
+For now, just use the working directory. To compile the cython version
+```
+python setup.py build_ext --inplace
+```
+
+Try it out with `python combine.py`
+
 ## Overview
 
 Given two arrays of equal shape (i.e. raster data with the same spatial referencing, origin, shape and cellsize):
