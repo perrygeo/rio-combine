@@ -42,6 +42,23 @@ and describe both input raster values and their counts:
 583       11       22      1
 617       12       22      3
 ```
+## Implementation
+
+Instead of using tuples to describe pairs of array values, we can use the [Cantor pairing function](http://en.wikipedia.org/wiki/Pairing_function#Cantor_pairing_function) to encode/decode two integers to a single integer.
+
+This allows us to use simple algebraic expressions with the highly optimized [`numexpr`](https://github.com/pydata/numexpr/wiki/Numexpr-Users-Guide) library.
+
+## Caveats
+
+The `combine_arrays_df` function will probably be renamed at some point.
+
+There are some constraints of this implementation that you should be aware of:
+
+* Input arrays
+    * must have same shape, are assumed to have the exact same spatial referencing, etc.
+    * must be integers, 16-bit less, due to limitations in Cantor pairing algorithm
+* Can only two arrays at a time (n-value cantor "pairing" is not implemented yet)
+* Output cell values are not contiguous or human-readable (but they are interpretable as a Cantor pair and this can be `depair`ed easily)
 
 ## Performance
 Compare to http://gis.stackexchange.com/questions/120102/fast-raster-combine-using-rasterio
