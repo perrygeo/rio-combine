@@ -28,13 +28,13 @@ def write_random_rasters(x, y):
         'dtype': rasterio.uint16,
     }
 
-    with rasterio.open('a.tiff', 'w', **kwargs) as dst:
+    with rasterio.open('tmpa.tif', 'w', **kwargs) as dst:
         dst.write_band(1, ndA)
 
-    with rasterio.open('b.tiff', 'w', **kwargs) as dst:
+    with rasterio.open('tmpb.tif', 'w', **kwargs) as dst:
         dst.write_band(1, ndB)
 
-    return 'a.tiff', 'b.tiff'
+    return 'tmpa.tif', 'tmpb.tif'
 
 
 def read_random_data(xsize=100, ysize=90):
@@ -55,7 +55,11 @@ def read_data(rasterA, rasterB):
 
 def combine_arrays_df(a, b):
     """
-    constraints:
+    Uses Cantor pairing via numexpr for fast unique combinations
+    Returns:
+        ndarray with unique cell values
+        pandas dataframe with cell values as index and raster vals and counts as columns
+    Input constraints:
         same shape,
         uint16 or less (due to limitations in Cantor pairing algorithm)
         only 2 raster at a time (n-value cantor "pairing" is not implemented)
@@ -89,24 +93,20 @@ def combine_arrays_df(a, b):
 
 def combine_arrays(a, b):
     """
+    Uses Cantor pairing via numexpr for fast unique combinations
     constraints:
         same shape,
         uint16 or less (due to limitations in Cantor pairing algorithm)
         only 2 raster at a time (n-value cantor "pairing" is not implemented)
         output cell values are not contiguous or human-readable (but can be depaired easily)
     """
-    assert a.shape == b.shape
-    assert a.dtype in (np.int8, np.int16, np.uint8, np.uint16)
+    import numexpr as ne
+    import numpy as np
+    from pairing import depair
 
-    # cantor pair as numexpr
     comb = ne.evaluate("0.5 * (a + b) * (a + b + 1) + b")
-
-    # Get unique combinations and count them
     ucomb, counts = np.unique(comb, return_counts=True)
-
-    # Value attribute table maps tuples of unique value combinations to uids
     vat = dict(((depair(uid), uid) for uid in ucomb))
-
     return comb, vat
 
 
@@ -136,7 +136,6 @@ if __name__ == "__main__":
                 comb2, vat2 = combine_rasters([src1, src2])
     t2 = time.time() - start
     print(t2, "combine_rasters (uses Cython and tuples)")
-
     print("-- numexpr version is {}x faster than cython version".format(round(t2/t1, 1)))
 
     # ----------- Test ----------------------------------

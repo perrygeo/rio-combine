@@ -80,3 +80,20 @@ def combine_arrays_bad(a, b):
 
     return cls_comb, vatdf
 
+
+def combine_arrays(a, b):
+    """
+    Uses Cantor pairing via numexpr for fast unique combinations
+    constraints:
+        same shape,
+        uint16 or less (due to limitations in Cantor pairing algorithm)
+        only 2 raster at a time (n-value cantor "pairing" is not implemented)
+        output cell values are not contiguous or human-readable (but can be depaired easily)
+    """
+    import numexpr as ne
+    import numpy as np
+    from pairing import depair
+    comb = ne.evaluate("0.5 * (a + b) * (a + b + 1) + b")
+    ucomb, counts = np.unique(comb, return_counts=True)
+    vat = dict(((depair(uid), uid) for uid in ucomb))
+    return comb, vat
