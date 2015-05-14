@@ -13,7 +13,9 @@ from combine2 import combine_rasters
 def build_flatlist(vat, count):
     result = {}
     for k, v in vat.items():
-        result[k] = list(v).append(count[k])
+        result[k] = list(v)
+    for k, v in count.items():
+        result[k].append(count[k])
     return result
 
 
@@ -39,8 +41,8 @@ def write_random_rasters(x, y):
 
 def read_random_data(xsize=100, ysize=90):
     return (
-        np.random.randint(100, 104, size=(ysize, xsize)).astype(np.uint16),
-        np.random.randint(200, 204, size=(ysize, xsize)).astype(np.uint16))
+        np.random.randint(10, 13, size=(ysize, xsize)).astype(np.uint16),
+        np.random.randint(20, 23, size=(ysize, xsize)).astype(np.uint16))
 
 
 def read_data(rasterA, rasterB):
