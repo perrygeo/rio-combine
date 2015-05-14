@@ -61,16 +61,17 @@ There are some constraints of this implementation that you should be aware of:
 * Output cell values are not contiguous or human-readable (but they are interpretable as a Cantor pair and this can be `depair`ed easily)
 
 ## Performance
-Compare to http://gis.stackexchange.com/questions/120102/fast-raster-combine-using-rasterio
+
+Compare to http://gis.stackexchange.com/questions/120102/fast-raster-combine-using-rasterio 
 
 ```
 $ python combine.py
 generating test rasters...
 benchmarking...
-0.326760053635 combine_arrays_df (uses numexpr and cantor pairing, outputs pandas df)
-0.306179046631 combine_arrays (uses numexpr and cantor pairing)
-7.90722513199 combine_rasters (uses Cython and tuples)
--- numexpr version is 25.8x faster than cython version
+0.296485185623 combine_arrays_df (uses numexpr and cantor pairing, outputs pandas df)
+0.26175403595 combine_arrays (uses numexpr and cantor pairing)
+9.00938606262 combine_rasters (uses Cython and tuples)
+-- numexpr version is 34.4x faster than cython version
 Testing on 500x500 random values
 OK
 ```
