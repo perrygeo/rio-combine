@@ -3,11 +3,7 @@ import numpy as np
 import pandas as pd
 import rasterio
 import numexpr as ne
-import time
-import random
-
 from pairing import depair
-from combine2 import combine_rasters
 
 
 def build_flatlist(vat, count):
@@ -111,41 +107,3 @@ def combine_arrays(a, b):
     vat = dict(((depair(uid), uid) for uid in ucomb))
     return comb, vat
 
-
-if __name__ == "__main__":
-    print("generating test rasters...")
-    p1, p2 = write_random_rasters(2000, 3000)
-    a1, a2 = read_data(p1, p2)
-
-    print("benchmarking...")
-    # Alternative: note 2rd return value: a dataframe with values as index
-    # ----------- Numexpr ------------------------------
-    start = time.time()
-    comb3, df3 = combine_arrays_df(a1, a2)
-    print(time.time() - start, "combine_arrays_df (uses numexpr and cantor pairing, outputs pandas df)")
-
-    # ----------- Numexpr ------------------------------
-    start = time.time()
-    comb1, vat1 = combine_arrays(a1, a2)
-    t1 = time.time() - start
-    print(t1, "combine_arrays (uses numexpr and cantor pairing)")
-
-    # ----------- Cython -------------------------------
-    start = time.time()
-    with rasterio.drivers(CPL_DEBUG=True):
-        with rasterio.open(p1, 'r') as src1:
-            with rasterio.open(p2, 'r') as src2:
-                comb2, vat2 = combine_rasters([src1, src2])
-    t2 = time.time() - start
-    print(t2, "combine_rasters (uses Cython and tuples)")
-    print("-- numexpr version is {}x faster than cython version".format(round(t2/t1, 1)))
-
-    # ----------- Test ----------------------------------
-    # Swap values and keys for easier lookup by cell value
-    swpvat1 = dict(zip(vat1.values(), vat1.keys()))
-    swpvat2 = dict(zip(vat2.values(), vat2.keys()))
-    print("Testing on 500x500 random values")
-    for x in [random.randint(0, comb2.shape[0]) in range(500)]:
-        for y in [random.randint(0, comb2.shape[1]) in range(500)]:
-            assert swpvat1[comb1[x, y]] == swpvat2[comb2[x, y]]
-    print("OK")
